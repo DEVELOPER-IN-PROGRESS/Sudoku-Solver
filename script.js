@@ -13,10 +13,6 @@ let sudoku = [
     [".",".",".",".",".","7",".",".","."]
 ]
 
-function resetboard(){
-
-}
-
 var solveSudoku = function(board) {
 
     function isValid(grid, row, col, k) {
@@ -56,7 +52,6 @@ var solveSudoku = function(board) {
       return true;
   }
      solve(board)
-     console.log(board)
      return board ;
 };
 
@@ -65,10 +60,30 @@ function populate(board){
     let box = 1;
     for(let i = 0 ; i < 9 ;i++){
         for(let j = 0 ; j < 9 ;j++){
-            document.querySelector(`.main-wrap .inner-box:nth-child(${box}) .cell:nth-child(${j+1})`).innerText = board[i][j]
+            if(board[i][j] == "."){
+                document.querySelector(`.main-wrap .inner-box:nth-child(${box}) .cell:nth-child(${j+1})`).value = ''
+            }else{
+            document.querySelector(`.main-wrap .inner-box:nth-child(${box}) .cell:nth-child(${j+1})`).value = board[i][j]
+            }
         }
         box++;
     }
+}
+
+function resetboard(){
+    sudoku = [
+        [".",".",".",".",".",".",".",".","."],
+        [".",".",".",".",".",".",".",".","."],
+        [".",".",".",".",".",".",".",".","."],
+        [".",".",".",".",".",".",".",".","."],
+        [".",".",".",".",".",".",".",".","."],
+        [".",".",".",".",".",".",".",".","."],
+        [".",".",".",".",".",".",".",".","."],
+        [".",".",".",".",".",".",".",".","."],
+        [".",".",".",".",".",".",".",".","."]
+    ]
+    document.querySelector(`.main-wrap .inner-box:nth-child(${r}) .cell:nth-child(${c})`).style.backgroundColor = '#FFFFFF'
+    populate(sudoku)
 }
 
 var isValidSudoku = function(board) {
@@ -107,25 +122,32 @@ function selectCell(e){
 }
 
 function solvePuzzle(){
-    debugger;
+    // debugger;
+    console.log('click')
    let sol =  solveSudoku(sudoku);
    populate(sol)
 }
 
 function addContent(e){
-    // e.preventDefault()
-    let num = e.key
-    if (num >0 && num < 10){
+    // document.getElementById(`${r-1}-${c-1}`).value = '';
+    let digit= e.data
+    console.log(e)
+    if (digit > 0 && digit < 10){
+        console.log(`yes  ${r} ${c} ${sudoku[r-1][c-1]}`)
         document.querySelector(`.main-wrap .inner-box:nth-child(${r}) .cell:nth-child(${c})`).style.color = 'blue';
-        document.querySelector(`.main-wrap .inner-box:nth-child(${r}) .cell:nth-child(${c})`).innerText = num ;
-        sudoku[r-1][c-1] = num;
+        document.getElementById(`${r-1}-${c-1}`).value = digit;
+        sudoku[r-1][c-1] = digit;
         // debugger
         if(!isValidSudoku(sudoku)){
             alert('This Board has no solution change the last entered input')
-            document.querySelector(`.main-wrap .inner-box:nth-child(${r}) .cell:nth-child(${c})`).innerText = '' ;
+            document.querySelector(`.main-wrap .inner-box:nth-child(${r}) .cell:nth-child(${c})`).value = '' ;
             document.querySelector(`.main-wrap .inner-box:nth-child(${r}) .cell:nth-child(${c})`).style.color = '#FFFFFF';
             sudoku[r-1][c-1] = ".";
+            document.getElementById(`${r-1}-${c-1}`).value = ''
         }
+    }else{
+        if(sudoku[r-1][c-1] != ".")
+        document.getElementById(`${r-1}-${c-1}`).value = sudoku[r-1][c-1]
     }
 }
 
@@ -136,9 +158,10 @@ function loadcontent(){
         for(let j = 0 ; j < 9 ;j++){
             let cell = document.querySelector(`.main-wrap .inner-box:nth-child(${box}) .cell:nth-child(${j+1})`)
             if (sudoku[i][j] != "."){
-                cell.innerText = sudoku[i][j]
+                cell.value = sudoku[i][j]
             }
             cell.addEventListener('click',selectCell)
+            cell.addEventListener('input', addContent )
             cell.id = `${i}-${j}` ;
         }
         box++;
@@ -147,5 +170,4 @@ function loadcontent(){
 
 document.getElementById('clear').addEventListener('click' , resetboard)
 document.getElementById('solve').addEventListener('click' , solvePuzzle )
-document.addEventListener('keypress', addContent )
 document.addEventListener('DOMContentLoaded', loadcontent);
