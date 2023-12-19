@@ -123,7 +123,7 @@ function selectCell(e){
 
 function solvePuzzle(){
     // debugger;
-    console.log('click')
+    // console.log('click')
    let sol =  solveSudoku(sudoku);
    populate(sol)
 }
@@ -131,9 +131,9 @@ function solvePuzzle(){
 function addContent(e){
     // document.getElementById(`${r-1}-${c-1}`).value = '';
     let digit= e.data
-    console.log(e)
+    // console.log(e)
     if (digit > 0 && digit < 10){
-        console.log(`yes  ${r} ${c} ${sudoku[r-1][c-1]}`)
+        // console.log(`yes  ${r} ${c} ${sudoku[r-1][c-1]}`)
         document.querySelector(`.main-wrap .inner-box:nth-child(${r}) .cell:nth-child(${c})`).style.color = 'blue';
         document.getElementById(`${r-1}-${c-1}`).value = digit;
         sudoku[r-1][c-1] = digit;
